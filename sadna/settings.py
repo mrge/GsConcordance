@@ -1,6 +1,8 @@
 # Django settings for sadna project.
+import os
 
 DEBUG = True
+DB_DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -9,18 +11,29 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'giladprojsadna',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': 'sadnaproj',
-        'PASSWORD': 'xsbv',
-        'HOST': '162.13.104.169',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '3306',                      # Set to empty string for default.
+if DB_DEBUG == False :
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'giladprojsadna',                      # Or path to database file if using sqlite3.
+            # The following settings are not used with sqlite3:
+            'USER': 'sadnaproj',
+            'PASSWORD': 'xsbv',
+            'HOST': '162.13.104.169',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+            'PORT': '3306',                      # Set to empty string for default.
+        }
     }
-}
-
+else :
+    DATABASES = { 
+        'default': {        
+            'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'projectsadna',  # Or path to database file if using sqlite3.
+            'USER': 'root',  # Not used with sqlite3.
+            'PASSWORD': '',  # Not used with sqlite3.
+            'HOST': '127.0.0.1',  # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '3306',  # Set to empty string for default. Not used with sqlite3.
+        }
+    }
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
@@ -48,20 +61,13 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/var/www/example.com/media/"
-MEDIA_ROOT = ''
+SETTINGS_ROOT = os.path.dirname(__file__)
+LOGFILE_ROOT = SETTINGS_ROOT
 
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash.
-# Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = ''
-
-# Absolute path to the directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/var/www/example.com/static/"
-STATIC_ROOT = ''
+#MEDIA_ROOT = os.path.join(SETTINGS_ROOT, "media")
+MEDIA_ROOT = "d:\sadna"
+MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(SETTINGS_ROOT, "static/")
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -98,6 +104,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -128,6 +135,8 @@ INSTALLED_APPS = (
     'files',
     'general',
     'words',
+    'django_extensions',
+    'debug_toolbar',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -140,15 +149,58 @@ LOGGING = {
     'disable_existing_loggers': False,
     'filters': {
         'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
     },
+    'formatters': {
+        'standard': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(filename)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+    },           
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'production_file':{
+            'level' : 'INFO',
+            'class':'logging.handlers.TimedRotatingFileHandler',
+            'when':'midnight',
+            'interval':1,
+            'filename': LOGFILE_ROOT + 'feedsme_prod.log',
+            #'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount' : 7,
+            'formatter': 'standard',
+            'filters': ['require_debug_false'],
+        },                          
+        'debug_file':{
+            'level' : 'DEBUG',
+            'class':'logging.handlers.TimedRotatingFileHandler',
+            'when':'midnight',
+            'interval':1,
+            'filename': LOGFILE_ROOT + 'feedsme_debug.log',
+            #'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount' : 7,
+            'formatter': 'standard',
+            #'filters': ['require_debug_true'],
+        },
+        'sql_log': {
+            'level':'DEBUG',
+            'filters': ['require_debug_true'],
+            'class':'logging.handlers.TimedRotatingFileHandler',
+            'when':'midnight',
+            'interval':1,
+            'filename': LOGFILE_ROOT + 'sql_queries.log',
+            #'encoding':'bz2',
+            #'maxBytes': 1024*1024*10,
+            'backupCount': 7,
+            'formatter': 'standard',
+        }                           
     },
     'loggers': {
         'django.request': {
@@ -156,5 +208,26 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        '': {
+            'handlers': ['production_file', 'debug_file'],
+            #'level': 'DEBUG',
+        },                
     }
+}
+
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.template.TemplateDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+)
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK':lambda r: not r.META['HTTP_USER_AGENT'].startswith('curl'),
+    'INTERCEPT_REDIRECTS':False
 }
