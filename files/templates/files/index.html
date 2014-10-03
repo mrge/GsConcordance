@@ -1,0 +1,87 @@
+{% extends "base_home.html" %}
+{% load staticfiles %}
+{% block content %}
+    <div class="row">
+
+		<aside class="span3">
+		    <section>
+		
+                <h2>Welcome to our files list!</h2>
+		        <div class="divider"><span></span></div>
+                <p>To add more books you need to access the admin control panel. Thanks.</p>
+		
+		    </section>
+		
+		</aside>    
+
+		<div class="panel-group" id="accordion">
+		  <div class="panel panel-default">
+		    <div class="panel-heading">
+		      <h4 class="panel-title">
+		        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="collapsed">
+		          View ALL Files Statistics
+		          
+		        </a>
+		      </h4>
+		    </div>
+		    <div id="collapseOne" class="panel-collapse collapse in">
+		      <div class="panel-body">
+		        {% for stat in stats_list %}
+					Average Number of Characters In Word: {{ stat.avg_wordlength }}<br>
+					Minimum Number of Characters In Word: {{ stat.min_wordlength }}<br>
+					Maximum Number of Characters In Word: {{ stat.max_wordlength }}<br>
+					Average Number of Characters In Sentence: {{ stat.avg_sentencelength }}<br>
+					Minimum Number of Characters In Sentence: {{ stat.min_sentencelength }}<br>
+					Maximum Number of Characters In Sentence: {{ stat.max_sentencelength }}<br>
+					Average Number of Characters In File : {{ stat.avg_filelength }}<br>
+					Minimum Number of Characters In File: {{ stat.min_filelength }}<br>
+					Maximum Number of Characters In File: {{ stat.max_filelength }}<br>
+					Average Number of Words In Sentence: {{ stat.avg_sentencewords }}<br>
+					Minimum Number of Words In Sentence: {{ stat.min_sentencewords }}<br>		         
+					Maximum Number of Words In Sentence: {{ stat.max_sentencewords }}<br>
+					Average Number of Words In File: {{ stat.avg_filewords }}<br>
+					Minimum Number of Words In File: {{ stat.min_filewords }}<br>
+					Maximum Number of Words In File: {{ stat.max_filewords }}<br>
+		        {% endfor %}
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		
+		{% if files_list %}
+    		<table class="table table-striped table-hover">
+    			<thead>
+				  <tr>
+				    <th>File ID</th>
+				    <th>Title</th>
+				    <th>Author</th>
+				    <th>Publish Date</th>
+				    <th>Loaded</th>
+				    <th>Total Words</th>
+				  </tr>    				
+    			</thead>
+			 	<tbody>
+					{% for file in files_list %}
+				    	<tr class='clickableRow {% if not file.fileloaded %} danger {% endif %}' href='{% url 'files.views.detail' file.id %}' style="cursor: pointer;">
+					        <td>{{ file.id }}</td>
+					        <td>{{ file.title }}</td>
+					        <td>{{ file.author }}</td>
+					        <td>{{ file.publishdate }}</td>
+					        <td><span class="label {% if file.fileloaded %} label-success {% else %} label-danger {% endif %}">{{ file.fileloaded }}</span></td>
+					        <td>{{ file.total_words }}</td>
+				        </tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+		{% else %}
+		    <p>No apps are available.</p>
+		{% endif %}		        
+    </div>
+
+{% endblock %}
+{% block footer %}
+	<script>
+		$('.collapse').collapse()
+	</script>
+{% endblock %}

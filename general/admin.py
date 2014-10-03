@@ -39,9 +39,9 @@ class FilesInline(admin.TabularInline):
 #        return instance
 
 class AuthorAdmin(admin.ModelAdmin):
-    inlines = [
-        FilesInline,
-    ]
+#    inlines = [
+#        FilesInline,
+#    ]
 
     list_display = ('id', 'firstname', 'lastname')
     search_fields = ['=id', 'firstname', 'lastname']

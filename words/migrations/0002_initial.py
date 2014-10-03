@@ -8,9 +8,26 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'Word'
+        db.create_table(u'words_word', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('createtime', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('lastupdatetime', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('createby', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='word_createby', null=True, to=orm['auth.User'])),
+            ('lastupdateby', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='word_lastupdateby', null=True, to=orm['auth.User'])),
+            ('active', self.gf('django.db.models.fields.BooleanField')(default=True, db_index=True)),
+            ('value', self.gf('django.db.models.fields.CharField')(max_length=256, db_index=True)),
+        ))
+        db.send_create_signal(u'words', ['Word'])
+
         # Adding model 'WordGroup'
         db.create_table(u'words_wordgroup', (
-            (u'objectbase_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['general.Objectbase'], unique=True, primary_key=True)),
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('createtime', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('lastupdatetime', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('createby', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='wordgroup_createby', null=True, to=orm['auth.User'])),
+            ('lastupdateby', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='wordgroup_lastupdateby', null=True, to=orm['auth.User'])),
+            ('active', self.gf('django.db.models.fields.BooleanField')(default=True, db_index=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=256)),
         ))
         db.send_create_signal(u'words', ['WordGroup'])
@@ -26,6 +43,9 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        # Deleting model 'Word'
+        db.delete_table(u'words_word')
+
         # Deleting model 'WordGroup'
         db.delete_table(u'words_wordgroup')
 
@@ -70,24 +90,25 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'general.objectbase': {
-            'Meta': {'object_name': 'Objectbase'},
+        u'words.word': {
+            'Meta': {'object_name': 'Word'},
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'db_index': 'True'}),
-            'createby': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'objectbase_createby'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'createby': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'word_createby'", 'null': 'True', 'to': u"orm['auth.User']"}),
             'createtime': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'lastupdateby': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'objectbase_lastupdateby'", 'null': 'True', 'to': u"orm['auth.User']"}),
-            'lastupdatetime': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        u'words.word': {
-            'Meta': {'object_name': 'Word', '_ormbases': [u'general.Objectbase']},
-            u'objectbase_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['general.Objectbase']", 'unique': 'True', 'primary_key': 'True'}),
-            'value': ('django.db.models.fields.CharField', [], {'max_length': '256'})
+            'lastupdateby': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'word_lastupdateby'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'lastupdatetime': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'value': ('django.db.models.fields.CharField', [], {'max_length': '256', 'db_index': 'True'})
         },
         u'words.wordgroup': {
-            'Meta': {'object_name': 'WordGroup', '_ormbases': [u'general.Objectbase']},
+            'Meta': {'object_name': 'WordGroup'},
+            'active': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'db_index': 'True'}),
+            'createby': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'wordgroup_createby'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'createtime': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'lastupdateby': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'wordgroup_lastupdateby'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'lastupdatetime': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            u'objectbase_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['general.Objectbase']", 'unique': 'True', 'primary_key': 'True'}),
             'words': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'groups'", 'symmetrical': 'False', 'to': u"orm['words.Word']"})
         }
     }

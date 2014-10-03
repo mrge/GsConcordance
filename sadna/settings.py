@@ -61,6 +61,8 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
+LOGIN_REDIRECT_URL = '/files/'
+
 SETTINGS_ROOT = os.path.dirname(__file__)
 LOGFILE_ROOT = SETTINGS_ROOT
 
@@ -104,7 +106,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -118,9 +120,11 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(SETTINGS_ROOT, "templates/")
 )
 
 INSTALLED_APPS = (
+    #'grappelli', 
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -136,7 +140,8 @@ INSTALLED_APPS = (
     'general',
     'words',
     'django_extensions',
-    'debug_toolbar',
+    #'debug_toolbar',
+    'djutils'
 )
 
 # A sample logging configuration. The only tangible logging

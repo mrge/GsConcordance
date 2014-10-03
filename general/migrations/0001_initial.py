@@ -8,21 +8,24 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Objectbase'
-        db.create_table(u'general_objectbase', (
+        # Adding model 'Author'
+        db.create_table(u'general_author', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('createtime', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('lastupdatetime', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('createby', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='objectbase_createby', null=True, to=orm['auth.User'])),
-            ('lastupdateby', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='objectbase_lastupdateby', null=True, to=orm['auth.User'])),
+            ('createby', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='author_createby', null=True, to=orm['auth.User'])),
+            ('lastupdateby', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='author_lastupdateby', null=True, to=orm['auth.User'])),
             ('active', self.gf('django.db.models.fields.BooleanField')(default=True, db_index=True)),
+            ('firstname', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('lastname', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('details', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
         ))
-        db.send_create_signal(u'general', ['Objectbase'])
+        db.send_create_signal(u'general', ['Author'])
 
 
     def backwards(self, orm):
-        # Deleting model 'Objectbase'
-        db.delete_table(u'general_objectbase')
+        # Deleting model 'Author'
+        db.delete_table(u'general_author')
 
 
     models = {
@@ -62,13 +65,16 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'general.objectbase': {
-            'Meta': {'object_name': 'Objectbase'},
+        u'general.author': {
+            'Meta': {'object_name': 'Author'},
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'db_index': 'True'}),
-            'createby': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'objectbase_createby'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'createby': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'author_createby'", 'null': 'True', 'to': u"orm['auth.User']"}),
             'createtime': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'details': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'firstname': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'lastupdateby': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'objectbase_lastupdateby'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'lastname': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'lastupdateby': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'author_lastupdateby'", 'null': 'True', 'to': u"orm['auth.User']"}),
             'lastupdatetime': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         }
     }

@@ -1,0 +1,92 @@
+{% extends "base_home.html" %}
+{% load staticfiles %}
+	{% block header %}
+	<style>
+		th.header { 
+		    background-image: url({% static "bg.gif" %}); 
+		    cursor: pointer; 
+		    font-weight: bold; 
+		    background-repeat: no-repeat; 
+		    background-position: center right; 
+		    padding-left: 20px; 
+		    border-right: 1px solid #dad9c7; 
+		    margin-left: -1px; 
+		} 		
+		th.headerSortUp { 
+		    background-image: url({% static "asc.gif" %}); 
+		} 		
+		th.headerSortDown { 
+		    background-image: url({% static "desc.gif" %}); 
+		} 
+
+	</style>
+    {% endblock %} 
+{% block container %}
+
+	<div class="row-fluid">
+	{% if error_message %}
+		<div class="alert"><p><strong>{{ error_message }}</strong></p></div>
+	{% endif %}
+	</div>
+		<aside class="span3">
+		    <section>
+		
+                <a href='{% url 'detail' file.id %}'><h2>Book: <b>{{ file.title }}</b></h2></a>
+                <h2>Word: <b>{{ word.value }}</b></h2>
+		        <div class="divider"><span></span></div>
+                <p>List of word appearances</p>
+		
+		    </section>
+		
+		</aside>  
+
+
+	<div class="row-fluid">
+		<h3>Total number of appearances: {{ filewords_total }}</h2>
+	</div>
+	<table class="table table-striped table-hover">
+		<thead>
+		  <tr>
+		    <th>ID</th>
+		    <th>Word</th>
+		    <th>Original appearance</th>
+		    <th>Word number</th>
+		    <th>Line number</th>
+		    <th>Sentence number</th>
+		    <th>Sample text</th>
+		  </tr>
+		</thead>
+		<tbody>
+			{% for fileword in filewords_list %}
+			    	<tr>
+				        <td>{{ fileword.id }}</td>
+				        <td>{{ fileword.word_value }}</td>
+				        <td>{{ fileword.word_original }}</td>				        
+				        <td><span class="badge">{{ fileword.wordno }}</span></td>
+				        <td><span class="badge">{{ fileword.lineno }}</span></td>
+				        <td><span class="badge">{{ fileword.sentenceno }}</span></td>
+				        <td>{% autoescape off %}{{ fileword.sample_text }}{% endautoescape %}</td>				        
+			        </tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
+    {% block footer %}
+	    <script src="{% static "jquery.filtertable.min.js" %}"></script>
+	    <script src="{% static "jquery.tablesorter.min.js" %}"></script>
+	    <script>
+	    $(document).ready(function() {
+	        $('table').filterTable({ // apply filterTable to all tables on this page
+	        	label: 'Search', // use the existing input instead of creating a new one,
+	        	placeholder: 'Search by any column'
+	        });
+	    });
+	    </script>
+	    <script>
+	    $(document).ready(function() 
+	    	    { 
+	    	        $('table').tablesorter(); 
+	    	    } 
+	    	); 
+	    </script>        
+    {% endblock %}

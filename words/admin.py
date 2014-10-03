@@ -3,7 +3,7 @@ from django.db import models
 from django.forms import TextInput, Textarea
 from files.models import File, FileWord
 from general.models import Author
-
+from words.models import Word, WordGroup
 
 class WordsInline(admin.TabularInline):
     model = Word
@@ -39,16 +39,16 @@ class WordsInline(admin.TabularInline):
 #        return instance
 
 class WordGroupAdmin(admin.ModelAdmin):
-    inlines = [
-        FilesInline,
-    ]
+#    inlines = [
+#        WordsInline,
+#    ]
 
     list_display = ('id', 'name')
     search_fields = ['=id', 'name']
     date_hierarchy = 'createtime'
     list_display_links = ('id', 'name')
     #list_filter = ('active')
-    #filter_horizontal = ('author',)    
+    filter_horizontal = ('words',)    
     ordering = ('-id',)
     #raw_id_fields = ('image',)
     #readonly_fields = ['image_link']
@@ -57,6 +57,11 @@ class WordGroupAdmin(admin.ModelAdmin):
         models.CharField: {'widget': TextInput(attrs={'rows':4, 'size':'100'})},
         models.TextField: {'widget': Textarea(attrs={'rows':4, 'cols':40})},
     }      
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "words":
+            kwargs["queryset"] = Word.objects.filter(active=True).order_by('value')
+        return super(WordGroupAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
     
     def save_model(self, request, obj, form, change): 
         obj.createby = request.user
@@ -69,7 +74,7 @@ class WordAdmin(admin.ModelAdmin):
     search_fields = ['=id', 'value']
     date_hierarchy = 'createtime'
     list_display_links = ('id', 'value')
-    #list_filter = ('active')
+    list_filter = ('active','filewords__file__title')
     #filter_horizontal = ('author',)    
     ordering = ('-id',)
     #raw_id_fields = ('image',)

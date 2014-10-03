@@ -1,0 +1,75 @@
+{% extends "base_home.html" %}
+{% load staticfiles %}
+{% block content %}
+    <div class="row">
+
+		<aside class="span3">
+		    <section>
+		
+                <h2>Welcome to our words list!</h2>
+		        <div class="divider"><span></span></div>
+                <p>To add more words you need to access the admin control panel. Thanks.</p>
+		
+		    </section>
+		{% if wordgroup %}<h3>WordGroup: {{wordgroup.name}}</h3>
+		<a type="button" class="btn btn-primary" href="?csv=True">Download as CSV</a>
+
+		{% endif %}
+		
+		</aside>    
+		
+		{% if words_list %}
+			<div align="center">
+		        <span class="current">
+		            Page {{ words_list.number }} of {{ words_list.paginator.num_pages }}.
+		        </span>	
+				<ul class="pager">
+			    	<li><a href="?page=1">First</a></li>
+			        {% if words_list.has_previous %}
+			            <li><a href="?page={{ words_list.previous_page_number }}">&laquo; Previous</a></li>
+			        {% endif %}				
+			        {% if words_list.has_next %}
+			            <li><a href="?page={{ words_list.next_page_number }}">&raquo; Next</a></li>
+			        {% endif %}
+			        <li><a href="?page={{ words_list.paginator.num_pages }}">Last</a></li>
+			    </ul>	    
+		    </div>
+    		<table class="table table-striped table-hover">
+    			<thead>
+				  <tr>
+				    <th>Word ID</th>
+				    <th>Value</th>
+				    <th>Total Appearances</th>
+				  </tr>    				
+    			</thead>
+			 	<tbody>
+					{% for word in words_list %}
+				    	<tr class='clickableRow' href='{% url 'detail' word.word__id %}' style="cursor: pointer;">
+					        <td>{{ word.word__id }}</td>
+					        <td>{{ word.word__value }}</td>
+					        <td><span class="label {% if word.total %} label-success {% else %} label-danger {% endif %}">{{ word.total }}</span></td>
+				        </tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<div align="center">
+		        <span class="current">
+		            Page {{ words_list.number }} of {{ words_list.paginator.num_pages }}.
+		        </span>	
+				<ul class="pager">
+			    	<li><a href="?page=1">First</a></li>
+			        {% if words_list.has_previous %}
+			            <li><a href="?page={{ words_list.previous_page_number }}">&laquo; Previous</a></li>
+			        {% endif %}				
+			        {% if words_list.has_next %}
+			            <li><a href="?page={{ words_list.next_page_number }}">&raquo; Next</a></li>
+			        {% endif %}
+			        <li><a href="?page={{ words_list.paginator.num_pages }}">Last</a></li>
+			    </ul>	    
+		    </div>
+		{% else %}
+		    <p>No apps are available.</p>
+		{% endif %}		        
+    </div>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base_home.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% block content %}
+<legend>You are now logged out. <b>See you soon!</b></legend>
+</br></br>
+<blockquote>Don't forget to download the Feedsme mobile app if you haven't done so!
+<div style="margin-top:30px;" id="footerapps">                        	
+	<a href="http://f33ds.me/iosapp"><img src="{% static "images/appstore.png" %}" style="width: 120px;padding-right: 10px;"></a>
+	<a href="http://f33ds.me/androidapp"><img src="{% static "images/googleplay.png" %}" style="width: 120px;"></a>
+</div>
+</blockquote>
+{% endblock %}
