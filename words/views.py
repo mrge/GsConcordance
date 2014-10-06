@@ -35,7 +35,7 @@ def words_page(request,context={},wordgroup_id=None):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         words = paginator.page(paginator.num_pages)             
-    new_context = {'words_list': words, 'title':'Words list','wordgroup': wordgroup}
+    new_context = {'object_list': words, 'title':'Words list','wordgroup': wordgroup}
     context = dict(context.items() + new_context.items())
     return render(request, 'words/index.html', context)
 

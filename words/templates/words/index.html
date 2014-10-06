@@ -18,22 +18,10 @@
 		
 		</aside>    
 		
-		{% if words_list %}
-			<div align="center">
-		        <span class="current">
-		            Page {{ words_list.number }} of {{ words_list.paginator.num_pages }}.
-		        </span>	
-				<ul class="pager">
-			    	<li><a href="?page=1">First</a></li>
-			        {% if words_list.has_previous %}
-			            <li><a href="?page={{ words_list.previous_page_number }}">&laquo; Previous</a></li>
-			        {% endif %}				
-			        {% if words_list.has_next %}
-			            <li><a href="?page={{ words_list.next_page_number }}">&raquo; Next</a></li>
-			        {% endif %}
-			        <li><a href="?page={{ words_list.paginator.num_pages }}">Last</a></li>
-			    </ul>	    
-		    </div>
+		{% if object_list %}
+		
+		{% include "pagination.html" %}
+    	
     		<table class="table table-striped table-hover">
     			<thead>
 				  <tr>
@@ -43,7 +31,7 @@
 				  </tr>    				
     			</thead>
 			 	<tbody>
-					{% for word in words_list %}
+					{% for word in object_list %}
 				    	<tr class='clickableRow' href='{% url 'detail' word.word__id %}' style="cursor: pointer;">
 					        <td>{{ word.word__id }}</td>
 					        <td>{{ word.word__value }}</td>
@@ -52,21 +40,9 @@
 					{% endfor %}
 				</tbody>
 			</table>
-			<div align="center">
-		        <span class="current">
-		            Page {{ words_list.number }} of {{ words_list.paginator.num_pages }}.
-		        </span>	
-				<ul class="pager">
-			    	<li><a href="?page=1">First</a></li>
-			        {% if words_list.has_previous %}
-			            <li><a href="?page={{ words_list.previous_page_number }}">&laquo; Previous</a></li>
-			        {% endif %}				
-			        {% if words_list.has_next %}
-			            <li><a href="?page={{ words_list.next_page_number }}">&raquo; Next</a></li>
-			        {% endif %}
-			        <li><a href="?page={{ words_list.paginator.num_pages }}">Last</a></li>
-			    </ul>	    
-		    </div>
+		
+		{% include "pagination.html" %}
+		
 		{% else %}
 		    <p>No apps are available.</p>
 		{% endif %}		        

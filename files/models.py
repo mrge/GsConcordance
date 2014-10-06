@@ -49,17 +49,20 @@ class File (Objectbase):
             c_words = 1
             c_sentence = 1
             filewords=[]
+            add_string = ''
             words = Word.objects.all().values_list('value','id')
             dwords = dict(list(words))
             for line in lines:
                 wordset = line.split()
+                add_string += '\n'
                 #filewords = []
                 for word_value in wordset:
                     new_word = FileWord(file=self)
                     new_word.lineno = c_lines
                     new_word.wordno = c_words
                     new_word.sentenceno = c_sentence
-                    new_word.word_original = word_value.decode("utf-8")
+                    new_word.word_original = add_string + word_value.decode("utf-8")
+                    add_string = ''               
                     word_fixed = Word.fix_word_str(word_value)
                     # Check the dictionary of words before adding word to DB
                     if dwords.get(word_fixed):

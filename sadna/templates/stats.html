@@ -1,0 +1,40 @@
+		<div class="panel-group" id="accordion">
+		  <div class="panel panel-default">
+		    <div class="panel-heading">
+		      <h4 class="panel-title">
+		        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="collapsed">
+		          View ALL Files Statistics
+		          
+		        </a>
+		      </h4>
+		    </div>
+		    <div id="collapseOne" class="panel-collapse collapse in">
+		      <div class="panel-body bg-primary">
+		        {% for stat in stats_list %}
+		        	<h3>Average Number of Characters In</h3>
+		        	<h4>Word: {{ stat.avg_wordlength }}</h4>
+		        	<h4>Sentence: {{ stat.avg_sentencelength }}</h4>
+		        	<h4>File: {{ stat.avg_filelength }}</h4>
+		        	<h3>Minimum Number of Characters In</h3>
+		        	<h4>Word: {{ stat.min_wordlength }}</h4>
+		        	<h4>Sentence: {{ stat.min_sentencelength }}</h4>
+		        	<h4>File: {{ stat.min_filelength }}</h4>
+		        	<h3>Maximum Number of Characters In</h3>
+		        	<h4>Word: {{ stat.max_wordlength }}</h4>
+		        	<h4>Sentence: {{ stat.max_sentencelength }}</h4>
+		        	<h4>File: {{ stat.max_filelength }}</h4>
+					<br>
+		        	<h3>Average Number of Words In</h3>
+		        	<h4>Sentence: {{ stat.avg_sentencewords }}</h4>
+		        	<h4>File: {{ stat.avg_filewords }}</h4>
+		        	<h3>Minimum Number of Words In</h3>
+		        	<h4>Sentence: {{ stat.min_sentencewords }}</h4>
+		        	<h4>File: {{ stat.min_filewords }}</h4>
+		        	<h3>Maximum Number of Words In</h3>
+		        	<h4>Sentence: {{ stat.max_sentencewords }}</h4>
+		        	<h4>File: {{ stat.max_filewords }}</h4>
+		        {% endfor %}
+		      </div>
+		    </div>
+		  </div>
+		</div>

@@ -1,0 +1,9 @@
+{% extends "base_home.html" %}
+{% load staticfiles %}
+{% block content %}
+<div class="jumbotron">
+  <a href='{% url 'files.views.detail' file.id %}'><h1>{{ file.title }} by {{ file.author.firstname }} {{ file.author.lastname }}</h1></a>
+  <br>
+  <pre>{{ text|linebreaks }} </pre>
+</div>
+{% endblock %}

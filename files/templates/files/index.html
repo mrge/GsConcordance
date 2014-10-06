@@ -14,39 +14,7 @@
 		
 		</aside>    
 
-		<div class="panel-group" id="accordion">
-		  <div class="panel panel-default">
-		    <div class="panel-heading">
-		      <h4 class="panel-title">
-		        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="collapsed">
-		          View ALL Files Statistics
-		          
-		        </a>
-		      </h4>
-		    </div>
-		    <div id="collapseOne" class="panel-collapse collapse in">
-		      <div class="panel-body">
-		        {% for stat in stats_list %}
-					Average Number of Characters In Word: {{ stat.avg_wordlength }}<br>
-					Minimum Number of Characters In Word: {{ stat.min_wordlength }}<br>
-					Maximum Number of Characters In Word: {{ stat.max_wordlength }}<br>
-					Average Number of Characters In Sentence: {{ stat.avg_sentencelength }}<br>
-					Minimum Number of Characters In Sentence: {{ stat.min_sentencelength }}<br>
-					Maximum Number of Characters In Sentence: {{ stat.max_sentencelength }}<br>
-					Average Number of Characters In File : {{ stat.avg_filelength }}<br>
-					Minimum Number of Characters In File: {{ stat.min_filelength }}<br>
-					Maximum Number of Characters In File: {{ stat.max_filelength }}<br>
-					Average Number of Words In Sentence: {{ stat.avg_sentencewords }}<br>
-					Minimum Number of Words In Sentence: {{ stat.min_sentencewords }}<br>		         
-					Maximum Number of Words In Sentence: {{ stat.max_sentencewords }}<br>
-					Average Number of Words In File: {{ stat.avg_filewords }}<br>
-					Minimum Number of Words In File: {{ stat.min_filewords }}<br>
-					Maximum Number of Words In File: {{ stat.max_filewords }}<br>
-		        {% endfor %}
-		      </div>
-		    </div>
-		  </div>
-		</div>
+	{% include "stats.html" %}
 		
 		{% if files_list %}
     		<table class="table table-striped table-hover">
@@ -56,7 +24,7 @@
 				    <th>Title</th>
 				    <th>Author</th>
 				    <th>Publish Date</th>
-				    <th>Loaded</th>
+				    <th>Status</th>
 				    <th>Total Words</th>
 				  </tr>    				
     			</thead>
@@ -67,7 +35,7 @@
 					        <td>{{ file.title }}</td>
 					        <td>{{ file.author }}</td>
 					        <td>{{ file.publishdate }}</td>
-					        <td><span class="label {% if file.fileloaded %} label-success {% else %} label-danger {% endif %}">{{ file.fileloaded }}</span></td>
+					        <td><span class="label {% if file.fileloaded %} label-success {% else %} label-danger {% endif %}">{% if file.fileloaded %} OK {% else %} Loading {% endif %}</span></td>
 					        <td>{{ file.total_words }}</td>
 				        </tr>
 					{% endfor %}

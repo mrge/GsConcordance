@@ -51,7 +51,7 @@ class FileAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'code')
     #list_filter = ('active')
     #filter_horizontal = ('author',)    
-    ordering = ('fileloaded','-id',)
+    ordering = ('-fileloaded','-id',)
     #raw_id_fields = ('image',)
     #readonly_fields = ['fileloaded','code']
 
