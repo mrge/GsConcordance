@@ -30,9 +30,12 @@
 	</div>
 		<aside class="span3">
 		    <section>
-		
-                <a href='{% url 'detail' file.id %}'><h2>Book: <b>{{ file.title }}</b></h2></a>
-                <h2>Word: <b>{{ word.value }}</b></h2>
+				{% if file %}
+                	<a href='{% url 'detail' file.id %}'><h2>Book: <b>{{ file.title }}</b></h2></a>
+                {% else %}
+                	<h2>All Books</h2>
+                {% endif %}
+                <h2>{{ objtype }}: <b>{{ searchtitle }}</b></h2>
 		        <div class="divider"><span></span></div>
                 <p>List of word appearances</p>
 		
@@ -48,7 +51,8 @@
 		<thead>
 		  <tr>
 		    <th>ID</th>
-		    <th>Word</th>
+		    <th>{{ objtype }}</th>
+		    <th>Book</th>
 		    <th>Original appearance</th>
 		    <th>Word number</th>
 		    <th>Line number</th>
@@ -61,6 +65,7 @@
 			    	<tr>
 				        <td>{{ fileword.id }}</td>
 				        <td>{{ fileword.word_value }}</td>
+				        <td>{{ fileword.file_title }}</td>
 				        <td>{{ fileword.word_original }}</td>				        
 				        <td><span class="badge">{{ fileword.wordno }}</span></td>
 				        <td><span class="badge">{{ fileword.lineno }}</span></td>

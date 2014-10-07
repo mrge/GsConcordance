@@ -34,21 +34,19 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">G's Books & Words</a>
+            <a class="navbar-brand" href="/files">G's Books & Words</a>
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="/admin" target="blank">Admin panel</a></li>
+              <li class="active"><a href="{% url 'admin:index' %}" target="blank">Admin panel</a></li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Files <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
                   <li><a href='{% url 'files.views.index' %}'>Files List</a></li>
-                  <!-- <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li> 
                   <li class="divider"></li>
-                  <li class="dropdown-header">Nav header</li>
-                  <li><a href="#">Separated link</a></li>
-                  <li><a href="#">One more separated link</a></li>-->
+                  <li class="dropdown-header">Admin</li>
+                  <li><a href="{% url 'admin:files_file_changelist' %}" target="blank">Manage Files</a></li>
+                  <li><a href="{% url 'admin:files_file_add' %}" target="blank">Add File</a></li>
                 </ul>
               </li>
               <li class="dropdown">
@@ -56,12 +54,15 @@
                 <ul class="dropdown-menu" role="menu">
                   <li><a href='{% url 'words.views.index' %}'>Words List</a></li>
                   <li><a href='{% url 'words.views.wordgroup_index' %}'>Groups List</a></li>
-                  <!-- <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li> 
+                  <li><a href='{% url 'words.views.wordphrase_index' %}'>Phrases List</a></li>
                   <li class="divider"></li>
-                  <li class="dropdown-header">Nav header</li>
-                  <li><a href="#">Separated link</a></li>
-                  <li><a href="#">One more separated link</a></li>-->
+                  <li class="dropdown-header">Admin</li>
+                  <li><a href="{% url 'admin:words_word_changelist' %}" target="blank">Manage Words</a></li>
+                  <li><a href="{% url 'admin:words_word_add' %}" target="blank">Add Word</a></li>
+                  <li><a href="{% url 'admin:words_wordgroup_changelist' %}" target="blank">Manage Groups</a></li>
+                  <li><a href="{% url 'admin:words_wordgroup_add' %}" target="blank">Add Group</a></li>
+                  <li><a href="{% url 'admin:words_wordphrase_changelist' %}" target="blank">Manage Phrases</a></li>
+                  <li><a href="{% url 'admin:words_wordphrase_add' %}" target="blank">Add Phrase</a></li>
                 </ul>
               </li>
 

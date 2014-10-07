@@ -36,7 +36,7 @@
 					        <td>{{ file.author }}</td>
 					        <td>{{ file.publishdate }}</td>
 					        <td><span class="label {% if file.fileloaded %} label-success {% else %} label-danger {% endif %}">{% if file.fileloaded %} OK {% else %} Loading {% endif %}</span></td>
-					        <td>{{ file.total_words }}</td>
+					        <td>{{ file.word_count }}</td>
 				        </tr>
 					{% endfor %}
 				</tbody>

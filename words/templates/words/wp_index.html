@@ -1,0 +1,65 @@
+{% extends "base_home.html" %}
+{% load staticfiles %}
+{% block content %}
+    <div class="row">
+
+		<aside class="span3">
+		    <section>
+		
+                <h2>Welcome to our words phrases list!</h2>
+		        <div class="divider"><span></span></div>
+                <p>To add more phrases you need to access the admin control panel. Thanks.</p>
+		
+		    </section>
+		</aside>    
+		
+		{% if wordgroups_list %}
+
+    		<table class="table table-striped table-hover">
+    			<thead>
+				  <tr>
+				    <th>Phrase ID</th>
+				    <th>Name</th>
+				    <th>Phrase</th>
+				    <th>Total Number of Words</th>
+				  </tr>    				
+    			</thead>
+			 	<tbody>
+					{% for group in wordgroups_list %}
+				    	<tr class='clickableRow' href='{% url 'words.views.wordphrasefilewordall_detail' group.id %}' style="cursor: pointer;">
+					        <td>{{ group.id }}</td>
+					        <td>{{ group.name }}</td>
+					        <td>{% for phraseword in group.sorted_words %}
+					        	{{ phraseword.word.value}} 
+					        	{% endfor %}</td>
+					        <td><span class="label {% if group.words.count %} label-success {% else %} label-danger {% endif %}">{{ group.words.count }}</span></td>
+				        </tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+		{% else %}
+		    <p>No apps are available.</p>
+		{% endif %}		        
+    </div>
+
+{% endblock %}
+    {% block footer %}
+	    <script src="{% static "jquery.filtertable.min.js" %}"></script>
+	    <script src="{% static "jquery.tablesorter.min.js" %}"></script>
+	    <script>
+	    $(document).ready(function() {
+	        $('table').filterTable({ // apply filterTable to all tables on this page
+	        	label: 'Search', // use the existing input instead of creating a new one,
+	        	placeholder: 'Search by any column'
+	        });
+	    });
+	    </script>
+	    <script>
+	    $(document).ready(function() 
+	    	    { 
+	    	        $('table').tablesorter(); 
+	    	    } 
+	    	); 
+	    </script>        
+    {% endblock %}

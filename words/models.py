@@ -60,3 +60,20 @@ class WordGroup (Objectbase):
 
     def __unicode__(self):
         return u'%d %s' % (self.id, self.name)
+    
+class WordPhrase (Objectbase):
+    
+    name = models.CharField(max_length=256, null=False, blank=False)
+    words = models.ManyToManyField(Word, related_name = 'phrases', through='words.WordPhraseWord',)
+
+    def __unicode__(self):
+        return u'%d %s' % (self.id, self.name)
+    
+    @property
+    def sorted_words(self):
+        return self.wordphraseword_set.order_by('sort')    
+
+class WordPhraseWord (models.Model):
+    wordphrase = models.ForeignKey(WordPhrase)
+    word = models.ForeignKey(Word)
+    sort = models.PositiveIntegerField(default=0)

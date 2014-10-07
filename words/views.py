@@ -1,30 +1,37 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from files.models import File, FileWord
-from words.models import Word, WordGroup
+from words.models import Word, WordGroup, WordPhrase
 from general.tools import query_to_list, print_log, print_error
 from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import HttpResponse
-
-from words.models import Word
 # Create your views here.
 @login_required
 def index(request):
     return words_page(request)  
 
-def words_page(request,context={},wordgroup_id=None):
+def words_page(request,context={},wordgroup_id=None,wordphrase_id=None):
     wordgroup = None
+    searchbox = request.GET.get('searchbox')
+    
     if wordgroup_id:
         wordgroup = get_object_or_404(WordGroup, pk=wordgroup_id)
         words_list = FileWord.objects.select_related().filter(word__active=True, word__groups__id = wordgroup_id).values('word__id','word__value').annotate(total=Count('word__id')).order_by('word__value')
-    else:    
-        words_list = FileWord.objects.select_related().filter(word__active=True).values('word__id','word__value').annotate(total=Count('word__id')).order_by('word__value')
+    elif wordphrase_id:
+        wordphrase = get_object_or_404(WordPhrase, pk=wordphrase_id)
+        words_list = FileWord.objects.select_related().filter(word__active=True, word__phrases__id = wordphrase_id).values('word__id','word__value').annotate(total=Count('word__id')).order_by('word__value')
+    else:
+        if searchbox:
+            searchbox = searchbox.upper()
+            words_list = FileWord.objects.select_related().filter(word__active=True, word__value__contains=searchbox).values('word__id','word__value').annotate(total=Count('word__id')).order_by('word__value')
+        else:
+            words_list = FileWord.objects.select_related().filter(word__active=True).values('word__id','word__value').annotate(total=Count('word__id')).order_by('word__value')
     
     csv = request.GET.get('csv')
     if csv:
         return download_words_csv(request,words_list)
-
+    
     paginator = Paginator(words_list, 100)
     page = request.GET.get('page')
     try:
@@ -35,7 +42,7 @@ def words_page(request,context={},wordgroup_id=None):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         words = paginator.page(paginator.num_pages)             
-    new_context = {'object_list': words, 'title':'Words list','wordgroup': wordgroup}
+    new_context = {'object_list': words, 'title':'Words list','wordgroup': wordgroup, 'searchbox':searchbox}
     context = dict(context.items() + new_context.items())
     return render(request, 'words/index.html', context)
 
@@ -81,4 +88,35 @@ def wordgroup_index(request):
     #wordgroups_list = WordGroup.objects.filter(active=True)
     wordgroups_list = Word.objects.select_related().filter(groups__active=True).values('groups__id','groups__name').annotate(total=Count('groups__id')).order_by('groups__id')
     context = {'wordgroups_list': wordgroups_list}
-    return render(request, 'words/wg_index.html', context)    
+    return render(request, 'words/wg_index.html', context)  
+
+def wordphrase_detail(request,wordphrase_id):
+    return words_page(request,wordphrase_id=wordphrase_id)
+    #wordgroup = get_object_or_404(WordGroup, pk=wordgroup_id)
+    #filewords = FileWord.objects.raw('CALL SP_GET_WORD_BY_WORD_ID(%s,%s);',[word_id,file_id])
+    #context = {'wordgroup': wordgroup, 'title':'Word in file','file':file}
+    #return render(request, 'words/fileword_detail.html', context) 
+
+def wordphrase_words(request, wordphrase_id,word_id):
+    return words_page(request,wordphrase_id=wordphrase_id)
+
+def wordphrase_index(request):
+    wordgroups_list = WordPhrase.objects.filter(active=True).select_related()
+    context = {'wordgroups_list': wordgroups_list}
+    return render(request, 'words/wp_index.html', context)
+
+def wordphrasefilewordall_detail(request,wordphrase_id):
+    return wordphrasefileword_detail(request,wordphrase_id,None)
+
+def wordphrasefileword_detail(request,wordphrase_id,file_id):
+    if file_id: 
+        fileobj = get_object_or_404(File, pk=file_id)
+    else:
+        fileobj= None
+        file_id=0
+    wordphrase = get_object_or_404(WordPhrase, pk=wordphrase_id)
+    filewords = FileWord.objects.raw('CALL SP_GET_PHRASE_BY_PHRASE_ID(%s,%s);',[wordphrase_id,file_id])
+    filewords_total = len(list(filewords))
+    context = {'filewords_total':filewords_total,'filewords_list': filewords, 'title':'Phrases in file','file':fileobj,'searchtitle':wordphrase.name, 'objtype': 'Phrase'}
+
+    return render(request, 'files/fileword_detail.html', context)
