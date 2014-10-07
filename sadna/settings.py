@@ -2,11 +2,11 @@
 import os
 
 DEBUG = True
-DB_DEBUG = True
+DB_DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+     ('Your Name', 'giladeven@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -67,7 +67,8 @@ SETTINGS_ROOT = os.path.dirname(__file__)
 LOGFILE_ROOT = SETTINGS_ROOT
 
 #MEDIA_ROOT = os.path.join(SETTINGS_ROOT, "media")
-MEDIA_ROOT = "d:\sadna"
+MEDIA_ROOT = os.path.join(SETTINGS_ROOT, "media/")
+#MEDIA_ROOT = "d:\sadna"
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(SETTINGS_ROOT, "static/")
 
@@ -117,7 +118,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -151,7 +152,7 @@ INSTALLED_APPS = (
     'general',
     'words',
     'django_extensions',
-    'debug_toolbar',
+    #'debug_toolbar',
     'djutils'
 )
 
@@ -231,19 +232,19 @@ LOGGING = {
     }
 }
 
-DEBUG_TOOLBAR_PANELS = (
-    'debug_toolbar.panels.version.VersionDebugPanel',
-    'debug_toolbar.panels.timer.TimerDebugPanel',
-    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-    'debug_toolbar.panels.headers.HeaderDebugPanel',
-    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-    'debug_toolbar.panels.template.TemplateDebugPanel',
-    'debug_toolbar.panels.sql.SQLDebugPanel',
-    'debug_toolbar.panels.signals.SignalDebugPanel',
-    'debug_toolbar.panels.logger.LoggingPanel',
-)
-
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK':lambda r: not r.META['HTTP_USER_AGENT'].startswith('curl'),
-    'INTERCEPT_REDIRECTS':False
-}
+#DEBUG_TOOLBAR_PANELS = (
+#    'debug_toolbar.panels.version.VersionDebugPanel',
+#    'debug_toolbar.panels.timer.TimerDebugPanel',
+#    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+#    'debug_toolbar.panels.headers.HeaderDebugPanel',
+#    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+#    'debug_toolbar.panels.template.TemplateDebugPanel',
+#    'debug_toolbar.panels.sql.SQLDebugPanel',
+#    'debug_toolbar.panels.signals.SignalDebugPanel',
+#    'debug_toolbar.panels.logger.LoggingPanel',
+#)
+#
+#DEBUG_TOOLBAR_CONFIG = {
+#    'SHOW_TOOLBAR_CALLBACK':lambda r: not r.META['HTTP_USER_AGENT'].startswith('curl'),
+#    'INTERCEPT_REDIRECTS':False
+#}
