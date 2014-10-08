@@ -15,10 +15,7 @@ def index(request):
 
 def files_page(request,context={}):
     files_list = File.objects.filter(active=True).select_related('words').annotate(word_count=Count('words'))
-    #cursor = connection.cursor()
-    #cursor.execute('CALL SP_GET_STATS_BY_FILE_ID(%s)',[1])
-    stats_list = call_an_sp('SP_GET_STATS_BY_FILE_ID',None)
-    #stats_list = query_to_list('CALL SP_GET_STATS_BY_FILE_ID(%s)',[1])         
+    stats_list = None #call_an_sp('SP_GET_STATS_BY_FILE_ID',None)
     new_context = {'stats_list':stats_list,'files_list': files_list, 'title':'Files list'}
     #context = dict(context.items() + new_context.items())
     return render(request, 'files/index.html', new_context)
@@ -55,7 +52,7 @@ def detail(request, file_id):
         total_filewords = FileWord.objects.filter(file_id__exact=file_id).count()
         words_list = FileWord.objects.select_related().filter(file_id__exact=file_id).values('word__id','word__value').annotate(total=Count('word__id')).order_by('word__value')
 
-    stats_list = call_an_sp('SP_GET_STATS_BY_FILE_ID',file_id)
+    stats_list = None #call_an_sp('SP_GET_STATS_BY_FILE_ID',file_id)
     
     if words_list:
         paginator = Paginator(words_list, 100)
@@ -90,3 +87,18 @@ def fileword_detail(request,file_id,word_id):
     filewords_total = len(list(filewords))
     context = {'filewords_total':filewords_total,'filewords_list': filewords, 'title':'Word in file','file':fileobj,'searchtitle':word.value, 'objtype': 'Word'}
     return render(request, 'files/fileword_detail.html', context) 
+
+
+
+def allstats(request):
+    return filestats(request,None)
+
+def filestats(request,file_id):
+    if file_id:
+        fileobj = get_object_or_404(File, pk=file_id)
+        stats_list = call_an_sp('SP_GET_STATS_BY_FILE_ID',file_id)
+    else:
+        fileobj = None
+        stats_list = call_an_sp('SP_GET_STATS_BY_FILE_ID',None)
+    context = {'stats_list':stats_list, 'file': fileobj}
+    return render(request, 'files/statsview.html', context) 

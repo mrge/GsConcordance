@@ -9,5 +9,7 @@ urlpatterns = patterns('',
     url(r'^(?P<file_id>\d+)/view$', views.view, name='view'),
     url(r'^(?P<file_id>\d+)/value/(?P<word_value>\w+)/$', views.fileword_detailv, name='fileword_detailv'),
     url(r'^(?P<file_id>\d+)/(?P<word_id>\d+)/$', views.fileword_detail, name='fileword_detail'),
+    url(r'^stats/$', views.allstats, name='allstats'),
+    url(r'^stats/(?P<file_id>\d+)/$', views.filestats, name='filestats'),
     
 )

@@ -1,0 +1,9 @@
+{% extends "base_home.html" %}
+{% load staticfiles %}
+{% block content %}
+	<div class="jumbotron">
+	  <h1>Why do they call it rush hour when nothing moves?</h1>
+	  <p>... Robin Williams
+	  <p><a href="{% url 'files.views.index' %}" class="btn btn-primary btn-lg" role="button">Open Files List</a></p>
+	</div>
+{% endblock %}
