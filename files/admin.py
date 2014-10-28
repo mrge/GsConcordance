@@ -72,7 +72,7 @@ class FileAdmin(admin.ModelAdmin):
         obj.code = random_slug()
         obj.save()
 
-    def queryset(self, request):
-        return super(FileAdmin, self).queryset(request).prefetch_related('filewords','filewords__word')        
+    #def queryset(self, request):
+    #    return super(FileAdmin, self).queryset(request).prefetch_related('filewords','filewords__word')        
 
 admin.site.register(File,FileAdmin)
